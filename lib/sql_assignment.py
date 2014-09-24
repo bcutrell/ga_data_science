@@ -23,5 +23,4 @@ class TripleCrownSql(object):
     return pd.io.sql.read_sql(sql, self.conn)
 
 df = TripleCrownSql().get_triple_crown_table()
-print df.to_html()
 
