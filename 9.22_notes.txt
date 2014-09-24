@@ -1,0 +1,9 @@
+9.22.14
+
+The Data Science Workflow
+1. Get Data
+  2. Clean it
+  3. Explore it
+  4. Model it (machine learning) *relatively easy
+  5. Interpret
+
