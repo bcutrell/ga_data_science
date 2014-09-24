@@ -20,7 +20,8 @@ class TripleCrownSql(object):
   def get_triple_crown_table(self):
     self.setup_triple_crown_table()
     sql = "select * from triple_crown_winners"
-    print pd.io.sql.read_sql(sql, self.conn)
+    return pd.io.sql.read_sql(sql, self.conn)
 
-TripleCrownSql().get_triple_crown_table()
+df = TripleCrownSql().get_triple_crown_table()
+print df.to_html()
 
