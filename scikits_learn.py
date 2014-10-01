@@ -9,9 +9,6 @@ knn.fit(X, y)
 # What kind of iris has 3cm x 5cm sepal and 4cm x 2cm petal?
 print iris.target_names[knn.predict([[3, 5, 4, 2]])]
 
-
-
-
 '''
 Cross Validation
 '''

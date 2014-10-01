@@ -29,12 +29,8 @@ def parse_player_str(rating_str):
   name = rating_str[name_re.end() + 1:].strip()
   return [position, rating, name]
 
-def store_nfl_player_for(year, results, version):
-  for player in results[:5]:
-    if version == 'Kimono':
-      player_str = player['player-ratings']
-    elif version == 'BeautifulSoup':
-      player_str = player.text
+def store_nfl_player_for(year, results):
+  for player_str in results[:5]:
 
     position, rating, name = \
     parse_player_str(player_str)
@@ -46,28 +42,32 @@ def store_nfl_player_for(year, results, version):
 
 def get_madden_ratings(years, path, version='Kimono'):
   for year in years:
+    print ''
+    print version
     print "**************************"
     print "Madden %s Ratings" % year
     print "**************************"
 
+    # code.interact(local=locals())
     url = path % year
     if version == 'Kimono':
-      query_results = json.load(urllib.urlopen(url))['results']['collection1']
+      all_results = json.load(urllib.urlopen(url))['results']['collection1']
+      clean_results = [p['player-ratings'] for p in all_results]
 
     elif version == 'BeautifulSoup':
-
       page = urllib.urlopen(url)
       soup = BeautifulSoup(page.read())
-      query_results = soup.findAll('div',{'style':'display:block;font-size:90%'})
+      all_results = soup.findAll('div',{'style':'display:block;font-size:90%'})
+      # code.interact(local=locals())
+      clean_results = [p.text for p in all_results]
 
-    # needs refactor, this should not know about the version
-    store_nfl_player_for(year, query_results, version) 
+    store_nfl_player_for(year, clean_results) 
 
 def seed_nfl_player_stats(all_nfl_players):
   '''
   TODO: This is messy and SLOW - here is what should fix this
   1. Map players by year
-  2. Pass array of list names
+  2. Pass list of player objs
   3. Match objects => update stats
   '''
 
@@ -93,32 +93,26 @@ roster = []
 Create NFLPlayer objects based on
 yearly Madden Ratings
 '''
+
 ##############################################
 ############### Kimono Labs ##################
 ##############################################
-print '****   KIMONO   ****'
-get_madden_ratings(madden_years, (kim_url + kimpath))
+# get_madden_ratings(madden_years, (kim_url + kimpath))
 
 ##############################################
 ############## Beautiful Soup ################
 ##############################################
-print '****   BeautifulSoup   ****'
 from bs4 import BeautifulSoup
-get_madden_ratings(madden_years, full_url, version="BeautifulSoup")
+# get_madden_ratings(madden_years, full_url, version="BeautifulSoup")
 
 '''
 Seed NFLPlayer objects with season stats
 '''
-seed_nfl_player_stats(roster)
+# seed_nfl_player_stats(roster)
 
 '''
 Pandas Work
+Pose 1-3 questions you hope to answer from the datayou've gathered.
 '''
 import pandas as pd
-
-
-
-
-
-
 

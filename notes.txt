@@ -7,3 +7,21 @@ The Data Science Workflow
   4. Model it (machine learning) *relatively easy
   5. Interpret
 
+What is Machine Learning?
+	- Statistical Modeling
+	- Computer Intelligence
+	- Adaptive
+
+software developer
+	* follow steps to make computer do what you want
+data scientist
+	* write a black box that allows a computer to make decisions on its own
+
+Types of machine learning problems
+ supervised => making predictions
+ unsupervised => discovering patterns
+ 	* running a clustering algorithm
+
+ Linear Regression:
+ 	taking a set of features from an observation - creating numerical output
+ 	using one value to predict another

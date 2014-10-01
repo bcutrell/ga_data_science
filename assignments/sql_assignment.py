@@ -1,4 +1,4 @@
-from postgres_db import MyDB
+from lib.postgres_db import MyDB
 import pandas as pd
 import json
 
