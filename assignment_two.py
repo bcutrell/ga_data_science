@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 class NFLPlayer(object):
   '''
   Stores all data related to a player instance
-  a player instance is there per season data
+  a player instance is their per season data
   '''
   def __init__(self, name, position, rating, year):
     self.name = name
@@ -48,7 +48,6 @@ def get_madden_ratings(years, path, version='Kimono'):
     print "Madden %s Ratings" % year
     print "**************************"
 
-    # code.interact(local=locals())
     url = path % year
     if version == 'Kimono':
       all_results = json.load(urllib.urlopen(url))['results']['collection1']
@@ -58,7 +57,6 @@ def get_madden_ratings(years, path, version='Kimono'):
       page = urllib.urlopen(url)
       soup = BeautifulSoup(page.read())
       all_results = soup.findAll('div',{'style':'display:block;font-size:90%'})
-      # code.interact(local=locals())
       clean_results = [p.text for p in all_results]
 
     store_nfl_player_for(year, clean_results) 
@@ -115,4 +113,3 @@ Pandas Work
 Pose 1-3 questions you hope to answer from the datayou've gathered.
 '''
 import pandas as pd
-

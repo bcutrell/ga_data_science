@@ -20,8 +20,38 @@ data scientist
 Types of machine learning problems
  supervised => making predictions
  unsupervised => discovering patterns
- 	* running a clustering algorithm
+ 	* running a clustering algorithm ( why did it cluster? )
+
+ continuous => qualitative
+ categorical => quantitative
 
  Linear Regression:
  	taking a set of features from an observation - creating numerical output
  	using one value to predict another
+
+How to determine the right approach?
+ the right approach is determined by the desired solution and
+ the data availible
+
+How to measure quality? (know if it works or not)
+
+holdout - train model on one set, try it out on another set (data)
+
+Classification algorithm
+	- put data in space so that you can compare two observations
+	- does not need to be x y axis, can handle n classifications
+
+Prediction errors
+	- Overfitting
+		* works really well in training set but in real world it doesn't do as well
+		* follows the changes too much, not following a real trend
+	- Do not evaluate model agaisnt the set you have trained on
+	- Bigger data set is always good... as long as you can handle it
+
+Understading the topic of cross-validation is one of the most important things you
+can get out of this class
+
+********* stats
+precision(p) = how many we got right / how many we got back
+recall(r) = how many we got right / how many are really out there
+f1 = 2pr / p + r

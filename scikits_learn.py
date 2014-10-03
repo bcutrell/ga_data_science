@@ -1,8 +1,13 @@
+import code # code.interact(local=locals())
 from sklearn.datasets import load_iris
 iris = load_iris()
 
 from sklearn import neighbors
+
 X, y = iris.data, iris.target
+code.interact(local=locals())
+
+# classify as whichever one it is closest to
 knn = neighbors.KNeighborsClassifier(n_neighbors=1)
 knn.fit(X, y)
 
@@ -16,7 +21,7 @@ Cross Validation
 from sklearn import cross_validation
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(iris.data, iris.target, test_size=0.4, random_state=0)
 
-knn = neighbors.KNeighborsClassifier(n_neighbors=1)
+knn = neighbors.KNeighborsClassifier(n_neighbors=3)
 knn.fit(X_train, y_train)
 predicted = knn.predict(X_test)
 
