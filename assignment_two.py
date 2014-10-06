@@ -47,12 +47,16 @@ def convert_names(roster):
   return roster
 
 def store_nfl_player_for(year, results):
+  year_map = {"07": 2007, "08": 2008, "09": 2009, 
+              "10": 2010, "11": 2011, "12": 2012, 
+              "13": 2013, "25": 2014, "15": 2015}
+
   for player_str in results:
     try: 
       position, rating, name = \
       parse_player_str(player_str)
 
-      nfl_player = NFLPlayer(name, position, rating, year)
+      nfl_player = NFLPlayer(name, position, rating, year_map[year])
       roster.append(nfl_player)
 
       print position, rating, name
@@ -103,7 +107,8 @@ def seed_nfl_player_stats(all_nfl_players):
 
 def seed_nfl_player_fo_stats(all_player_stats):
   fo_players_list = []
-  for year in range(2009, 2014):
+  player_names = []
+  for year in range(2007, 2015):
     url = "http://www.footballoutsiders.com/stats/qb%s" % str(year)
     page = urllib.urlopen(url)
     soup = BeautifulSoup(page.read())
@@ -113,7 +118,10 @@ def seed_nfl_player_fo_stats(all_player_stats):
     for row in rows[1:]:
       cells = row.findChildren('td')
       player_name = cells[0].text
-      player = filter(lambda p: p.name == player_name and p.year == str(year)[2:], all_player_stats)
+      player_names.append(player_name)
+      # plus one for stats to predict rating
+      # plus zero for rating to predict stats
+      player = filter(lambda p: p.name == player_name and p.year == year, all_player_stats)
       if player:
         player = player[0]
         player.dvar = cells[2].text
@@ -134,6 +142,7 @@ def generate_csv_for_all(pos, full_player_list):
 
   # offical NFL stats
   # seed_nfl_player_stats(roster)
+
   csv = []
   headers = ["Name", "Position", "Rating", "Year", "DVOA", "QBR", "DVAR"]
   csv.append(headers)
@@ -141,37 +150,80 @@ def generate_csv_for_all(pos, full_player_list):
     row = [p.name, p.position, p.rating, p.year, p.dvoa, p.qbr, p.dvar]
     csv.append(row)
 
-  pd.DataFrame(csv).to_csv(pos.lower() + '_stats_and_madden_ratings.csv')
+  # pd.DataFrame(csv).to_csv(pos.lower() + '_stats_and_madden_ratings.csv')
+  pd.DataFrame(csv).to_csv(pos.lower() + '_stats_per_rating.csv')
   
 
 # VARIABLES
-madden_years = ["09", "10", "11", "12", "13", "25", "15"]
+madden_years = ["07", "08", "09", "10", "11", "12", "13", "25", "15"]
 kim_url = "https://www.kimonolabs.com/api/9dtcwnt8?apikey=2c5543a652a646b03103e96704c3c5a9"
 kimpath = "&kimpath1=madden-nfl-%s-key-players.html"
 full_url = 'http://maddenratings.weebly.com/madden-nfl-%s-key-players.html'
 roster = []
 
-'''
-Seed Data
 
-  First: Create NFLPlayer objects based on
-  yearly Madden Ratings
-  Second: Seed NFLPlayer objects with season stats and FO stats
-'''
-# Kimono Labs 
-# get_madden_ratings(madden_years, (kim_url + kimpath))
+import argparse
 
-# Beautiful Soup
-# get_madden_ratings(madden_years, full_url, version="BeautifulSoup")
+def main(args):
+    cmd = args.command
 
-# Write to file
-# position = 'QB'
-# generate_csv_for_all(position, roster)
+    if cmd == 'seed_data':
+      '''
+      Seed Data
+        First: Create NFLPlayer objects based on yearly Madden Ratings
+        Second: Seed NFLPlayer objects with season stats and FO stats
+      '''
+
+      get_madden_ratings(madden_years, full_url, version="BeautifulSoup")
+      position = 'QB'
+      generate_csv_for_all(position, roster)
+    elif cmd == 'pandas_df':
+      pass
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument('command', choices=['seed_data'])
+  args = parser.parse_args()
+  main(args)
+
 
 '''
 Pandas Work
 Pose 1-3 questions you hope to answer from the data you've gathered.
 '''
 
-df = pd.read_csv('qb_stats_and_madden_ratings.csv')
-code.interact(local=locals())
+# df = pd.read_csv('qb_stats_and_madden_ratings.csv')
+# code.interact(local=locals())
+
+'''
+# IPython Notes
+import statsmodels.formula.api as sm
+import pandas as pd
+
+data = pd.read_csv("~/python/ga_data_science/qb_stats_and_madden_ratings.csv")
+data = data[data['Year'] == 2015]
+
+
+# Statsmodels
+model = sm.ols(formula="Rating ~ QBR", data=data).fit()
+from patsy import dmatrices
+y, X = dmatrices('Rating ~ QBR', data=data, return_type='dataframe')
+
+import numpy as np
+import pylab as pl
+pl.scatter(X['QBR'], y, color='black')
+
+## Sklearn
+from sklearn.linear_model import LinearRegression
+y, X = dmatrices('QBR ~ Rating', data=data, return_type='dataframe')
+model = LinearRegression()
+model = model.fit(X,y)
+model.score(X,y)
+
+pl.scatter(X['yr'], y, color='black')
+pl.plot(X['yr'], model.predict(X), color='blue', linewidth=3)
+pl.xticks(())
+pl.yticks(())
+
+pl.show()
+'''
