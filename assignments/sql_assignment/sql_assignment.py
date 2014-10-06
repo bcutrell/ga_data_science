@@ -1,10 +1,15 @@
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+
 from lib.postgres_db import MyDB
 import pandas as pd
 import json
 
 class TripleCrownSql(object):
   def __init__(self):
-    with open('./database.json', 'r') as f:
+    with open('../database.json', 'r') as f:
       db_config = json.load(f)
 
     self.db = MyDB(**db_config)
