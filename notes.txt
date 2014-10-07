@@ -55,3 +55,32 @@ can get out of this class
 precision(p) = how many we got right / how many we got back
 recall(r) = how many we got right / how many are really out there
 f1 = 2pr / p + r
+
+What's overfitting?
+	- When your model fits too closely to your training sample to be generalized
+	- Very important to avoid this
+
+Σ |βi| this is called the L1-norm
+Σ βi2 this is called the L2-norm
+
+Why and how are we doing regularization?
+	- minimize unnecessary params
+	- prevent overfitting by explicity controlling the complexity
+
+OLS: min(||y – xβ||2)
+ - average of the squared differences
+
+L1 regularization: min( || y – x β|| 2 + λ|| β|| )	
+L2 regularization: min( || y – x β|| 2 + λ|| β|| 2 )
+* a large value of complexity is probably going to hurt us
+
+How do you solve an optimization problem?
+	- calculus, set the first derivative equal to zero, second derivate negative
+
+**lookup Dimensionality reduction
+
+Checkout DataViz notebook for pandas graphing examples
+
+Ridge is l2 regularization
+
+normalization -- center and scaling

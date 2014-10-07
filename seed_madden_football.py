@@ -180,6 +180,7 @@ def main(args):
 
       # one for stats based on rating
       # zero for rating based on stats
+      # think about adding tds, yards
       generate_csv_for_all(position, roster, 1)
 
 if __name__ == '__main__':
