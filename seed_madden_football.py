@@ -12,7 +12,7 @@ import code # code.interact(local=locals())
 import json
 import urllib
 import re
-import nflgame # NFL database information
+import nfldb # NFL database information
 from bs4 import BeautifulSoup
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -86,26 +86,34 @@ def get_madden_ratings(years, path, version='Kimono'):
 
     store_nfl_player_for(year, clean_results) 
 
+def season_player_stats(full_name, season):
+  q = nfldb.Query(db)
+
+  q.game(season_year=season, season_type='Regular')
+  q.player(gsis_name=full_name)
+  pps = q.as_aggregate()
+
+  # Make sure only one player was aggregated
+  if len(pps) == 0 or len(pps) > 2:
+      return None
+  return pps[0]
+
+
 def seed_nfl_player_stats(all_nfl_players):
-  '''
-  TODO: This is messy and SLOW - here is what should fix this
-  1. Map players by year
-  2. Pass list of player objs
-  3. Match objects => update stats
-  '''
+  for p in all_nfl_players:
+    stats = season_player_stats(p.name, p.year + offset)
+    if stats:
+      p.stats = \
+      { 'passing_yds': stats.passing_yds, 
+        'passing_tds': stats.passing_tds, 
+        'passing_int': stats.passing_int}
+    else:
+      p.stats = \
+      { 'passing_yds': None, 
+        'passing_tds': None, 
+        'passing_int': None}
 
-  for nfl_player in all_nfl_players[:1]:
-      nflgame_player = nflgame.find(nfl_player.name)
-
-      if len(nflgame_player) == 1:
-        for year in range(2009, 2014): # data starts in 2009
-          try:
-            all_player_stats = nflgame_player[0].stats(year)
-            nfl_player.stats = all_player_stats.stats
-          except:
-            pass
-
-def seed_nfl_player_fo_stats(all_player_stats, offset):
+def seed_nfl_player_fo_stats(all_player_stats):
   fo_players_list = []
   player_names = []
   for year in range(2007, 2015):
@@ -120,7 +128,7 @@ def seed_nfl_player_fo_stats(all_player_stats, offset):
       player_name = cells[0].text
       player_names.append(player_name)
 
-      player = filter(lambda p: p.name == player_name and p.year == (year + offset), all_player_stats)
+      player = filter(lambda p: p.name == player_name and p.year == (year - offset), all_player_stats)
       if player:
         player = player[0]
         player.dvar = cells[2].text
@@ -130,38 +138,56 @@ def seed_nfl_player_fo_stats(all_player_stats, offset):
 
   return fo_players_list
 
-def generate_csv_for_all(pos, full_player_list, offset):
+def generate_csv_for_all(pos, full_player_list):
   '''
   Get the remaining data, FO or NFL
   and put into CSV form
   '''
   roster = filter(lambda p: p.position == pos, full_player_list)
   roster = convert_names(roster)
-  roster_with_data = seed_nfl_player_fo_stats(roster, offset)
-
-  # offical NFL stats
-  # seed_nfl_player_stats(roster)
-
+  seed_nfl_player_stats(roster) # offical NFL stats
+  roster_with_data = seed_nfl_player_fo_stats(roster)
   csv = []
-  headers = ["Name", "Position", "Rating", "Year", "DVOA", "QBR", "DVAR"]
+
+  headers = \
+  [ "Name", "Position", "Rating", 
+    "Year", "DVOA", "QBR", "DVAR", 
+    "Yards", "TD", "INT" ]
+
   csv.append(headers)
   for p in roster_with_data:
-    row = [p.name, p.position, p.rating, p.year, p.dvoa, p.qbr, p.dvar]
+    row = \
+    [ p.name, p.position, p.rating, 
+      p.year, p.dvoa, p.qbr, p.dvar, 
+      p.stats['passing_yds'], 
+      p.stats['passing_tds'], 
+      p.stats['passing_int'] ]
+
     csv.append(row)
   
-  if offset == 1:
-    file_name = 'rating_from_qb_stats.csv'
+  if offset == 1 or offset == -1:
+    file_name = '_madden_rating_from_stats.csv'
   elif offset == 0:
-    file_name = 'qb_stats_from_rating.csv'
+    file_name = '_stats_from_madden_rating.csv'
 
   pd.DataFrame(csv).to_csv(pos.lower() + file_name)
 
 # VARIABLES
+db = nfldb.connect(database='nfldb_public',
+  user='nfldb_public',
+  password='nfldb_public',
+  host='burntsushi.net',
+  port=6432)
+
 madden_years = ["07", "08", "09", "10", "11", "12", "13", "25", "15"]
 kim_url = "https://www.kimonolabs.com/api/9dtcwnt8?apikey=2c5543a652a646b03103e96704c3c5a9"
 kimpath = "&kimpath1=madden-nfl-%s-key-players.html"
 full_url = 'http://maddenratings.weebly.com/madden-nfl-%s-key-players.html'
 roster = []
+
+# negative one for stats based on rating
+# zero for rating based on stats
+offset = -1
 
 import argparse
 
@@ -177,11 +203,7 @@ def main(args):
 
       get_madden_ratings(madden_years, full_url, version="BeautifulSoup")
       position = 'QB'
-
-      # one for stats based on rating
-      # zero for rating based on stats
-      # think about adding tds, yards
-      generate_csv_for_all(position, roster, 1)
+      generate_csv_for_all(position, roster)
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
