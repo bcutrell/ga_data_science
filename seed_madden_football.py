@@ -101,7 +101,7 @@ def season_player_stats(full_name, season):
 
 def seed_nfl_player_stats(all_nfl_players):
   for p in all_nfl_players:
-    stats = season_player_stats(p.name, p.year + offset)
+    stats = season_player_stats(p.name, p.year - offset)
     if stats:
       p.stats = \
       { 'passing_yds': stats.passing_yds, 
@@ -128,7 +128,7 @@ def seed_nfl_player_fo_stats(all_player_stats):
       player_name = cells[0].text
       player_names.append(player_name)
 
-      player = filter(lambda p: p.name == player_name and p.year == (year - offset), all_player_stats)
+      player = filter(lambda p: p.name == player_name and p.year == (year + offset), all_player_stats)
       if player:
         player = player[0]
         player.dvar = cells[2].text
@@ -165,7 +165,7 @@ def generate_csv_for_all(pos, full_player_list):
 
     csv.append(row)
   
-  if offset == 1 or offset == -1:
+  if offset == 1:
     file_name = '_madden_rating_from_stats.csv'
   elif offset == 0:
     file_name = '_stats_from_madden_rating.csv'
@@ -185,7 +185,7 @@ kimpath = "&kimpath1=madden-nfl-%s-key-players.html"
 full_url = 'http://maddenratings.weebly.com/madden-nfl-%s-key-players.html'
 roster = []
 
-# negative one for stats based on rating
+# one for stats based on rating
 # zero for rating based on stats
 offset = -1
 
