@@ -187,7 +187,7 @@ roster = []
 
 # one for stats based on rating
 # zero for rating based on stats
-offset = -1
+offset = 0
 
 import argparse
 
