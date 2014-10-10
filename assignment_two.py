@@ -150,7 +150,7 @@ df_scaled.index = df['Year']
 df_scaled[df_scaled['Name'] == 'T.Brady'].plot()
 df_scaled[df_scaled['Name'] == 'T.Brady'].plot(y=["DVAR","TD","INT"])
 
-df[df['Name'] == 'T.Brady'].set_index('Year')[x_attrs].pct_change().plot()
+df[df['Name'] == 'T.Brady'].set_index('Year')[x_attrs].pct_change().plot(figsize=(10,10))
 df[df['Name'] == 'T.Brady'].set_index('Year')[x_attrs].pct_change().dropna().plot(figsize=(10,10))
 df[df['Name'] == 'P.Manning'].set_index('Year')[x_attrs].pct_change().dropna().plot(figsize=(10,10))
 

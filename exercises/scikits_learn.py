@@ -93,3 +93,16 @@ model.fit(x,y)
 print model.coef_
 print model.alpha_
 print model.score(X,y)
+
+def rename_columns(name, c):
+  if not c == 'Name' or c == 'Year':
+    return name + '_' + c.lower()
+  else:
+    return c.lower()
+tbrady.rename(columns=lambda x: rename_columns('brady', x), inplace=True)
+pmanning.rename(columns=lambda x: rename_columns('manning', x), inplace=True)
+
+
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10,10))
+tbrady[x_attrs].pct_change().plot(ax=axes[0]).set_title('Brady')
+pmanning[x_attrs].pct_change().plot(ax=axes[1]).set_title('Manning')
