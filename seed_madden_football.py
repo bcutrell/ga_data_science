@@ -98,7 +98,6 @@ def season_player_stats(full_name, season):
       return None
   return pps[0]
 
-
 def seed_nfl_player_stats(all_nfl_players):
   for p in all_nfl_players:
     stats = season_player_stats(p.name, p.year - offset)
@@ -210,3 +209,11 @@ if __name__ == '__main__':
   parser.add_argument('command', choices=['seed_data'])
   args = parser.parse_args()
   main(args)
+
+
+# look at the correlations
+# sklearn correlation matricies
+# kendals tau *scipy
+
+# pearson sklearn *sklearn
+  # start here check out the wiki page

@@ -84,3 +84,5 @@ Checkout DataViz notebook for pandas graphing examples
 Ridge is l2 regularization
 
 normalization -- center and scaling
+
+* logistic regression has the advantage of being a probablistic classifier
