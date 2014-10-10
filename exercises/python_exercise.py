@@ -94,3 +94,13 @@ axarr[1, 0].plot(x, y ** 2)
 axarr[1, 0].set_title('Axis [1,0]')
 axarr[1, 1].scatter(x, y ** 2)
 axarr[1, 1].set_title('Axis [1,1]')
+
+# yearly
+# map years
+df_map = {}
+for yr in df['Year'].unique():
+  df_map[yr] = df[df['Year'] == yr]
+xy_map = {}
+for yr, df_values in df_map.items():
+  y, X = dmatrices(regr, data=df_values, return_type='dataframe')
+  xy_map[yr] = {'y': y, 'X': X}
