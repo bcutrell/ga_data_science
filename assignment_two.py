@@ -156,3 +156,39 @@ df[df['Name'] == 'P.Manning'].set_index('Year')[x_attrs].pct_change().dropna().p
 
 df[df['Name'] == 'P.Manning'].set_index('Year')[x_attrs][:-1] # all but last year
 
+# four player comparison
+fig, axes = plt.subplots(nrows=4, ncols=2, figsize=(16,16))
+tbrady[attrs].pct_change()[:-1].plot(ax=axes[0,0], kind='bar'); axes[0,0].set_title('Brady')
+tbrady['Rating'].plot(ax=axes[0,1], linewidth=6); axes[0,1].set_title('Brady')
+axes[0,0].get_xaxis().set_ticks([])
+axes[0,1].get_xaxis().set_ticks([])
+
+pmanning[attrs].pct_change()[:-1].plot(ax=axes[1,0], kind='bar'); axes[1,0].set_title('Manning')
+pmanning['Rating'].plot(ax=axes[1,1], linewidth=6); axes[1,1].set_title('Manning')
+axes[1,0].get_xaxis().set_ticks([])
+axes[1,1].get_xaxis().set_ticks([])
+
+broberger[attrs].pct_change()[:-1].plot(ax=axes[2,0], kind='bar'); axes[2,0].set_title('Roethlisberger')
+broberger['Rating'].plot(ax=axes[2,1], linewidth=6); axes[2,1].set_title('Roethlisberger')
+axes[2,0].get_xaxis().set_ticks([])
+axes[2,1].get_xaxis().set_ticks([])
+
+dbress[attrs].pct_change()[:-1].plot(ax=axes[3,0], kind='bar'); axes[3,0].set_title('Brees')
+dbress['Rating'].plot(ax=axes[3,1], linewidth=6); axes[3,1].set_title('Brees')
+axes[3,0].get_xaxis().set_ticks([])
+
+# individual player vs rating
+fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(12,12))
+tbrady[attrs].pct_change()[:-1].plot(ax=axes[0], kind='bar'); axes[0].set_title('Brady')
+tbrady['Rating'].plot(ax=axes[1], linewidth=6)
+axes[0].get_xaxis().set_ticks([])
+
+fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(12,12))
+pmanning[attrs].pct_change()[:-1].plot(ax=axes[0], kind='bar'); axes[0].set_title('Manning')
+pmanning['Rating'].plot(ax=axes[1], linewidth=6)
+axes[0].get_xaxis().set_ticks([])
+
+tbrady[x_attrs].pct_change()[:-1].plot(figsize=(10,10))
+pmanning[x_attrs].pct_change()[:-1].plot(figsize=(10,10))
+broberger[x_attrs].pct_change()[:-1].plot(figsize=(10,10))
+dbrees[x_attrs].pct_change()[:-1].plot(figsize=(10,10))
