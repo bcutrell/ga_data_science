@@ -1,4 +1,3 @@
-
 # Scrapper
 # The data was scrapped from the following two sites and mathced with actual nfl statistics
 from IPython.core.display import HTML
@@ -17,10 +16,14 @@ from pandas.tools.plotting import scatter_matrix
 from urllib import urlopen
 import scipy
 import numpy as np
-import pylab as pl  
+import pylab as pl
 from patsy import dmatrices
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model
+plt_styles_url = "https://raw.githubusercontent.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/styles/bmh_matplotlibrc.json"
+r = urlopen(plt_styles_url)
+plt_styles = json.load(r)
+pl.rcParams.update(plt_styles)
 
 '''
 The Madden Curse:
