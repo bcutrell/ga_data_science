@@ -8,26 +8,26 @@ The Data Science Workflow
   5. Interpret
 
 What is Machine Learning?
-	- Statistical Modeling
-	- Computer Intelligence
-	- Adaptive
+        - Statistical Modeling
+        - Computer Intelligence
+        - Adaptive
 
 software developer
-	* follow steps to make computer do what you want
+        * follow steps to make computer do what you want
 data scientist
-	* write a black box that allows a computer to make decisions on its own
+        * write a black box that allows a computer to make decisions on its own
 
 Types of machine learning problems
- supervised => making predictions
+ supervised => making predictions ( we know the class labels )
  unsupervised => discovering patterns
- 	* running a clustering algorithm ( why did it cluster? )
+        * running a clustering algorithm ( why did it cluster? )
 
  continuous => qualitative
  categorical => quantitative
 
  Linear Regression:
- 	taking a set of features from an observation - creating numerical output
- 	using one value to predict another
+        taking a set of features from an observation - creating numerical output
+        using one value to predict another
 
 How to determine the right approach?
  the right approach is determined by the desired solution and
@@ -38,15 +38,15 @@ How to measure quality? (know if it works or not)
 holdout - train model on one set, try it out on another set (data)
 
 Classification algorithm
-	- put data in space so that you can compare two observations
-	- does not need to be x y axis, can handle n classifications
+        - put data in space so that you can compare two observations
+        - does not need to be x y axis, can handle n classifications
 
 Prediction errors
-	- Overfitting
-		* works really well in training set but in real world it doesn't do as well
-		* follows the changes too much, not following a real trend
-	- Do not evaluate model agaisnt the set you have trained on
-	- Bigger data set is always good... as long as you can handle it
+        - Overfitting
+                * works really well in training set but in real world it doesn't do as well
+                * follows the changes too much, not following a real trend
+        - Do not evaluate model agaisnt the set you have trained on
+        - Bigger data set is always good... as long as you can handle it
 
 Understading the topic of cross-validation is one of the most important things you
 can get out of this class
@@ -57,25 +57,25 @@ recall(r) = how many we got right / how many are really out there
 f1 = 2pr / p + r
 
 What's overfitting?
-	- When your model fits too closely to your training sample to be generalized
-	- Very important to avoid this
+        - When your model fits too closely to your training sample to be generalized
+        - Very important to avoid this
 
 Σ |βi| this is called the L1-norm
 Σ βi2 this is called the L2-norm
 
 Why and how are we doing regularization?
-	- minimize unnecessary params
-	- prevent overfitting by explicity controlling the complexity
+        - minimize unnecessary params
+        - prevent overfitting by explicity controlling the complexity
 
 OLS: min(||y – xβ||2)
  - average of the squared differences
 
-L1 regularization: min( || y – x β|| 2 + λ|| β|| )	
+L1 regularization: min( || y – x β|| 2 + λ|| β|| )
 L2 regularization: min( || y – x β|| 2 + λ|| β|| 2 )
 * a large value of complexity is probably going to hurt us
 
 How do you solve an optimization problem?
-	- calculus, set the first derivative equal to zero, second derivate negative
+        - calculus, set the first derivative equal to zero, second derivate negative
 
 **lookup Dimensionality reduction
 
@@ -86,3 +86,33 @@ Ridge is l2 regularization
 normalization -- center and scaling
 
 * logistic regression has the advantage of being a probablistic classifier
+how is it related to linear regression?
+  - doing a transformation to squash it on a 0,1 interval
+
+For the binomial distribution, the confugate prior is the beta distribution
+
+if you choose a good prior, youll get to reasonable probability sooner
+
+likelihood function
+  - can possibly require every single possible combination
+
+Idenpendence => P(A|B) = P(A)
+Dependence => P(A|B) = 
+
+Matrix where each row is a document and the column is the feature count
+
+*** When to split ****
+Splits are determined by the purity condition
+There are different measures of inpurity =>
+entropy, gini, classification
+
+*We are only going to use entropy
+- entropy itself is a measure of impurity
+We also want to quantify the change
+
+* C4.5 is consistently the best decision tree algorithm
+regularization => adds something to model that penalizes overfitting
+- with decision trees this is done by using the gain ratio
+
+*** When to stop ***
+
