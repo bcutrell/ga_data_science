@@ -1,80 +1,47 @@
 import code # code.interact(local=locals())
 import pandas as pd
-# import statsmodels.api as sm
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.ensemble import ExtraTreesRegressor
+from scipy import sparse
+from scipy.sparse import hstack, coo_matrix
+from sklearn.preprocessing import LabelEncoder
 from sklearn import cross_validation
+from sklearn.ensemble import RandomForestClassifier
+import pickle
 
-df = pd.read_csv('/Users/bcutrell/python/ga_data_science/assignments/salary_prediction/train1k.csv')
+model_path = '/Users/bcutrell/Desktop/comp/model.pickle'
+benchmark_model = pickle.load(open(model_path))
+df = pd.read_csv('/Users/bcutrell/python/ga_data_science/assignments/salary_prediction/train50k.csv')
 
-'''
-split into city + state
-'''
-def location_splitter(text, case='')
-  if case == 'City'
-    x.split(',')[0]
-  elif case == 'Country'
-    x.split(',')[-1]
-  elif case == 'State'
-    
+# Features
+text_features = ['Title', 'FullDescription','LocationRaw']
+categorical_features = ["Category", "ContractType"]
+
+# Remove NaNs
+clean_df = df[text_features + categorical_features + ['SalaryNormalized']].dropna()
+
+# Text Vectorizer
+vectorizer = TfidfVectorizer(max_features=240000, norm='l2', smooth_idf=True, sublinear_tf=False, use_idf=True)
+X_text = np.array([vectorizer.fit_transform(clean_df[f]) for f in text_features])
+
+# Categorical Vectorizer
+le = LabelEncoder()
+X_cat = np.array([le.fit_transform(clean_df[c].as_matrix()) for c in categorical_features])
+
+# Merge together
+X_text = hstack((X_text))
+X_train = hstack((X_text, X_cat.T))
+
+# Declare ExtraTreeRegressor
+classifier = ExtraTreesRegressor(n_estimators=10,
+                                verbose=2,
+                                n_jobs=2,
+                                oob_score=False,
+                                min_samples_split=2,
+                                random_state=3465343)
 
 
-df['City'] = df['LocationRaw'].apply(lambda x: x.split(',')[0])
-df['Country'] = df['LocationRaw'].apply(lambda x: x.split(',')[-1])
-code.interact(local=locals())
-
-X = sm.tools.tools.categorical(df['Category'].values, drop=True)
-y = df['SalaryNormalized'].values
-
-df1 = pd.get_dummies(df['Category'])
-df1['Salary'] = df['SalaryNormalized']
-
-attrs = sm.tools.tools.categorical(df.columns.values, drop=True)
-
-train_set, test_set = cross_validation.train_test_split(df, test_size=0.3, random_state=0)
-
-mod = sm.formula.ols("SalaryNormalized ~ LocationNormalized", data=df)
-res = mod.fit()
-print res.summary()
-
-from patsy import dmatrices
-
-y, X = dmatrices('sl ~ sx + yr + rk', data=data, return_type='dataframe')
-import pylab as pl
-
-from sklearn.linear_model import LinearRegression
-model = LinearRegression()
-model = model.fit(X,y)
-model.score(X,y)
-
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import make_scorer
-from sklearn.cross_validation import KFold
-
-scoring = make_scorer(mean_squared_error, greater_is_better=False)
-cv = KFold(X.shape[0], 10)
-model = linear_model.RidgeCV(alphas=[0.1, 1.0, 10.0], cv=cv, scoring=scoring)
-model.fit(X,y)
-
-train_set.dtype = df.columnsl
-
-from pandas.tools.plotting import scatter_matrix
-scatter_matrix(df1, alpha=0.2, figsize=(10, 10), diagonal='kde');
-
-'Id',
-'Title',
-'FullDescription',
-'LocationRaw',
-'LocationNormalized',
-'ContractType',
-'ContractTime',
-'Company',
-'Category',
-'SalaryRaw',
-'SalaryNormalized',
-'SourceName'
-
-# import numpy as np
-# from sklearn.feature_extraction import DictVectorizer as DV
-# nphitters=np.loadtxt('Hitters.csv',delimiter=',', skiprows=1)
-# vec = DV( sparse = False )
-# catL=vec.fit_transform(nphitters[:,3:4])
+full_r = cross_validation.cross_val_score(classifier, X_train.toarray(), np.log(clean_df['SalaryNormalized'].values), cv=3, verbose=1)
+print np.mean(full_r)
 
