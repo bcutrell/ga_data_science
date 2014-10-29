@@ -29,6 +29,8 @@ Types of machine learning problems
         taking a set of features from an observation - creating numerical output
         using one value to predict another
 
+# regression is not a classification problem
+
 How to determine the right approach?
  the right approach is determined by the desired solution and
  the data availible
@@ -115,4 +117,74 @@ regularization => adds something to model that penalizes overfitting
 - with decision trees this is done by using the gain ratio
 
 *** When to stop ***
+- pre running, setting a minimal threshold for gain
+
+random forest
+  - decide on a number of trees
+  - have them all vote
+  - the majority wins
+
+min_df = word needs to occur at least once
+spare_matrix improves performance
+
+*************************************
+10/22/14
+
+Ensemble methods =>
+ ensemble: combining multiple classifiers
+ takes more time
+
+types of problems
+statistical: I dont have enough data
+computational: find the best classifier
+
+Types of Ensemble methods
+Bagging:
+  running a bunch of classifiers in parralell and then having
+  them vote ( like a random forrest )
+  overfitting is less likely with bagging
+
+Boosting:
+  iterative procedure that changes the samping distribution of
+  training records at each iteration
+
+  with any booster that is better than random you can keep
+  iterating until you find something better but this has the
+  possibility of overfitting
+
+** Boosting is in series, bagging is in parallel
+
+Anything where you can average the results in some way can be an ensemble method
+*performance is a bigger deal than most people think
+
+SVM is great for quickly updating the data,
+points that are closest to the boundary lines are the support vectors
+
+SVM is always worth a try but it is very hard to explain
+
+KNN
+Logistic Regression
+Naive Bayes
+
+unsupervised => no labeled answers
+
+K means clustering is one of the best tools in the exploration phase
+
+Greedy learner => decision trees, at each step we are doing local optimization
+At every point, you have to recalculate centriods
+
+Steps in developing Kmeans
+1) Choose starting centroids
+2) Assign each point to closest centroid
+3) recalculate cluster centroids
+4) repeat 2-3 until convergence
+
+Cluster validation
+- squared errors good for linear validation
+- generalization
+- taking a weighted average of silhouette coefficient
+    - SSE versus number of clusters
+    - average silhouette coefficient versus nmber of clusters in the data
+
+
 
