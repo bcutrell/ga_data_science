@@ -59,7 +59,7 @@ from sklearn.cross_validation import cross_val_score
 
 for model in models:
   clf = model()
-  clf.fit(X.as_matrix(), np.ravel(y.as_matrix()))
+  # clf.fit(X.as_matrix(), np.ravel(y.as_matrix()))
   print model.__name__
   print '***************'
   results = cross_val_score(clf, X.as_matrix(), np.ravel(y.as_matrix()))
