@@ -80,6 +80,8 @@ How do you solve an optimization problem?
         - calculus, set the first derivative equal to zero, second derivate negative
 
 **lookup Dimensionality reduction
+PCA -- principal component analysis
+SVD -- singular value decomposition
 
 Checkout DataViz notebook for pandas graphing examples
 
@@ -186,5 +188,18 @@ Cluster validation
     - SSE versus number of clusters
     - average silhouette coefficient versus nmber of clusters in the data
 
+*********************************
+Recommendation systems
+*********************************
+11/3/14
 
+*********************************
+Networks
+*********************************
+11/19/14
+
+Different types of networks
+  - directed or undirected
+
+number of connections => degree
 
